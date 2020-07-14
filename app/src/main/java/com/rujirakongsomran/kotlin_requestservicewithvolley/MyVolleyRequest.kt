@@ -2,7 +2,7 @@ package com.rujirakongsomran.kotlin_requestservicewithvolley
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.LruCache
+import androidx.collection.LruCache
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -16,6 +16,7 @@ class MyVolleyRequest {
     private var context: Context? = null
     private var iVolley: IVolley? = null
     var imageLoader: ImageLoader? = null
+        private  set
 
 
     val requestQueue: RequestQueue
@@ -31,12 +32,12 @@ class MyVolleyRequest {
         mRequestQueue = requestQueue
         this.imageLoader = ImageLoader(mRequestQueue, object : ImageLoader.ImageCache {
             private val mCache = LruCache<String, Bitmap>(10)
-            override fun getBitmap(url: String?): Bitmap {
-                return mCache.get(url)
+            override fun getBitmap(url: String?): Bitmap? {
+                return mCache.get(url!!)
             }
 
             override fun putBitmap(url: String?, bitmap: Bitmap?) {
-                mCache.put(url, bitmap)
+                mCache.put(url!!, bitmap!!)
             }
 
         })
@@ -47,11 +48,11 @@ class MyVolleyRequest {
         mRequestQueue = requestQueue
         this.imageLoader = ImageLoader(mRequestQueue, object : ImageLoader.ImageCache {
             private val mCache = LruCache<String, Bitmap>(10)
-            override fun getBitmap(url: String?): Bitmap {
+            override fun getBitmap(url: String): Bitmap? {
                 return mCache.get(url)
             }
 
-            override fun putBitmap(url: String?, bitmap: Bitmap?) {
+            override fun putBitmap(url: String, bitmap: Bitmap) {
                 mCache.put(url, bitmap)
             }
 
